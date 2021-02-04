@@ -31,8 +31,8 @@ class Autokey(Cipher):
         ret = ''
         for (i,c) in enumerate(string):
             if i<len(self.key): offset = self.a2i(self.key[i])
-            else: offset = self.a2i(string[i-len(self.key)])     
-            ret += self.i2a(self.a2i(c)+offset)
+            else: offset = self.a2i(string[i-len(self.key)])
+            ret += self.i2a(self.a2i(c)+offset,lower=c.islower())
         return ret    
 
     def decipher(self,string):

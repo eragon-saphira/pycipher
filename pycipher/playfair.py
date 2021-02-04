@@ -21,8 +21,8 @@ class Playfair(Cipher):
     def encipher_pair(self, a, b):
         if a == b:
             b = 'X'
-        arow, acol = int(self.key.index(a) / 5), self.key.index(a) % 5
-        brow, bcol = int(self.key.index(b) / 5), self.key.index(b) % 5
+        arow, acol = self.key.index(a) // 5, self.key.index(a) % 5
+        brow, bcol = self.key.index(b) // 5, self.key.index(b) % 5
         if arow == brow:
             return self.key[arow * 5 + (acol + 1) % 5] + self.key[brow * 5 + (bcol + 1) % 5]
         elif acol == bcol:
@@ -32,8 +32,8 @@ class Playfair(Cipher):
         
     def decipher_pair(self, a, b):
         assert a != b, 'two of the same letters occurred together, illegal in playfair'
-        arow, acol = int(self.key.index(a) / 5), self.key.index(a) % 5
-        brow, bcol = int(self.key.index(b) / 5), self.key.index(b) % 5
+        arow, acol = self.key.index(a) // 5, self.key.index(a) % 5
+        brow, bcol = self.key.index(b) // 5, self.key.index(b) % 5
         if arow == brow:
             return self.key[arow * 5 + (acol - 1) % 5] + self.key[brow * 5 + (bcol - 1) % 5]
         elif acol == bcol:
@@ -52,7 +52,7 @@ class Playfair(Cipher):
         :param string: The string to encipher.
         :returns: The enciphered string.
         """    
-        string = self.remove_punctuation(string)  
+        string = self.remove_punctuation(string,characters=self.key).upper()
         string = re.sub(r'[J]', 'I', string)
         if len(string) % 2 == 1:
             string += 'X'
@@ -72,7 +72,7 @@ class Playfair(Cipher):
         :param string: The string to decipher.
         :returns: The deciphered string.
         """    
-        string = self.remove_punctuation(string)  
+        string = self.remove_punctuation(string).upper()
         if len(string) % 2 == 1:
             string += 'X'
         ret = ''

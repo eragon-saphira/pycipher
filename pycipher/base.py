@@ -4,7 +4,8 @@ really only provides mappings a2i and i2a for letter->int->letter conversions
 Author: James Lyons
 Created: 2012-04-28
 '''
-import re
+import string
+import warnings
 
 class Cipher(object):
     def encipher(self,string):
@@ -14,16 +15,16 @@ class Cipher(object):
         return string
         
     def a2i(self,ch):
-        ch = ch.upper()
-        arr = {'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6,'H':7,'I':8,'J':9,'K':10,
-           'L':11,'M':12,'N':13,'O':14,'P':15,'Q':16,'R':17,'S':18,'T':19,'U':20,
-           'V':21,'W':22,'X':23,'Y':24,'Z':25}
-        return arr[ch]
+        return ord(ch)-65 if ch.isupper() else ord(ch)-97
 
-    def i2a(self,i):
-        i = i%26
-        arr = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')
-        return arr[i]
+    def i2a(self,i,lower=False):
+        i=i%26
+        return chr(i+97) if lower else chr(i+65)
         
-    def remove_punctuation(self,text,filter='[^A-Z]'):
-        return re.sub(filter,'',text.upper())
+    def remove_punctuation(self,text,characters=None):
+        no_punctuation = text.translate(str.maketrans("","",string.punctuation))
+        if characters:
+            filtered_chars = ''.join(ch for ch in no_punctuation if ch in characters)
+            if len(filtered_chars) != no_punctuation:
+                warnings.warn(message="The data contains characters missing in key which will be removed",category=ResourceWarning)
+        return no_punctuation

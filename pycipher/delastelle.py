@@ -33,10 +33,10 @@ class Delastelle(Cipher):
         :param string: The string to encipher.
         :returns: The enciphered string. The ciphertext will be 3 times the length of the plaintext.
         """           
-        string = self.remove_punctuation(string,filter='[^'+self.key+']')        
+        string = self.remove_punctuation(string,characters=self.key)
         ctext = ""
         for c in string:
-            ctext += ''.join([str(i) for i in L2IND[c]])
+            ctext += ''.join([str(i) for i in self.L2IND[c]])
         return ctext
 
     def decipher(self,string):

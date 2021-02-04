@@ -5,6 +5,7 @@ Created: 2012-04-28
 '''
 from pycipher.base import Cipher
 import re
+import string
 
 ####################################################################################
 class PolybiusSquare(Cipher):
@@ -18,7 +19,7 @@ class PolybiusSquare(Cipher):
     """    
     def __init__(self,key='phqgiumeaylnofdxkrcvstzwb',size=5,chars=None):
         self.key = ''.join([k.upper() for k in key])
-        self.chars = chars or 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[:size]
+        self.chars = chars or string.ascii_uppercase[:size]
         self.size = size
         assert len(self.key)==size*size, 'invalid key in init: must have length size*size, has length '+str(len(key))
         assert len(self.chars)==size, 'invalid chars in init: must have length=size, has length '+str(len(chars))
@@ -43,7 +44,7 @@ class PolybiusSquare(Cipher):
         :param string: The string to encipher.
         :returns: The enciphered string. The ciphertext will be twice the length of the plaintext.
         """           
-        string = self.remove_punctuation(string)#,filter='[^'+self.key+']')
+        string = self.remove_punctuation(string.upper(),self.key).upper()#,filter='[^'+self.key+']')
         ret = ''
         for c in range(0,len(string)):
             ret += self.encipher_char(string[c])
